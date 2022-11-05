@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -25,6 +26,23 @@ namespace TestN5.Data.Repositories
             List<Permissions> ltPermissions = _testN5Context.Permissions.ToList();
 
             return ltPermissions;
+        }
+
+        public bool ModifyPermission(Permissions obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RequestPermission(Permissions obj)
+        {
+            _testN5Context.Add(obj);
+            _testN5Context.SaveChanges();
+
+            int NewId = obj.Id;
+
+            if (NewId > 0) return true;
+            else return false;
+
         }
     }
 }

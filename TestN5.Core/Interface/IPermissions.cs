@@ -10,5 +10,7 @@ namespace TestN5.Core.Interface
     public interface IPermissions
     {
         List<Permissions> GetPermissions();
+        bool RequestPermission(Permissions obj);
+        bool ModifyPermission(Permissions obj);
     }
 }
