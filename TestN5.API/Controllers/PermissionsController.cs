@@ -6,7 +6,6 @@ using TestN5.Data.Repositories;
 
 namespace TestN5.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class PermissionsController : ControllerBase
     {
@@ -17,6 +16,7 @@ namespace TestN5.API.Controllers
             _iPermissions = iPermissions;
         }
 
+        [Route("GetPermissions")]
         [HttpGet]
         public IActionResult GetPermissions()
         {
