@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TestN5.Core.Entities;
-using TestN5.Core.Interface;
+using TestN5.Core.Interfaces;
 using TestN5.Data.Dto;
 using TestN5.Data.Repositories;
 
@@ -10,13 +10,13 @@ namespace TestN5.API.Controllers
     [ApiController]
     public class PermissionsController : ControllerBase
     {
-        private readonly IPermissions _iPermissions;
+        private readonly IServicePermissions _iServicePermissions;
         private readonly ILogger<PermissionsController> _logger;
         DateTime thisDay = DateTime.Today;
 
-        public PermissionsController(IPermissions iPermissions, ILogger<PermissionsController> logger)
+        public PermissionsController(IServicePermissions iServicePermissions, ILogger<PermissionsController> logger)
         {
-            _iPermissions = iPermissions;
+            _iServicePermissions = iServicePermissions;
             _logger = logger;
         }
 
@@ -26,7 +26,7 @@ namespace TestN5.API.Controllers
         {
             _logger.LogInformation("Request svc GetPermissions date " + thisDay.ToString());
 
-            List<Permissions> ltPermissions = _iPermissions.GetPermissions();
+            List<Permissions> ltPermissions = _iServicePermissions.GetPermissions();
             List<DtoPermissions> ltDtoPermissions = ltPermissions.Select(x => new DtoPermissions
             {
                 Id = x.Id,
@@ -55,7 +55,7 @@ namespace TestN5.API.Controllers
                 PermissionDate = obj.PermissionDate
             };
 
-            bool response = _iPermissions.RequestPermission(objPermissions);
+            bool response = _iServicePermissions.RequestPermission(objPermissions);
             if (response) return Ok("Se registro correctamente");
             else return Ok("No se registro, intente nuevamente");
         }
@@ -76,7 +76,7 @@ namespace TestN5.API.Controllers
                 PermissionDate = obj.PermissionDate
             };
 
-            bool response = _iPermissions.ModifyPermission(objPermissions);
+            bool response = _iServicePermissions.ModifyPermission(objPermissions);
             if (response) return Ok("Se actualizo correctamente");
             else return Ok("No se actualizo, intente nuevamente");
         }

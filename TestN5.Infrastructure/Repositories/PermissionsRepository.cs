@@ -8,7 +8,7 @@ using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using TestN5.Core.Entities;
-using TestN5.Core.Interface;
+using TestN5.Core.Interfaces;
 using TestN5.Data.Data;
 
 namespace TestN5.Data.Repositories
@@ -27,6 +27,12 @@ namespace TestN5.Data.Repositories
             List<Permissions> ltPermissions = _testN5Context.Permissions.ToList();
 
             return ltPermissions;
+        }
+
+        public Permissions GetPermissionsById(int Id)
+        {
+            Permissions objPermissions = _testN5Context.Permissions.Where(x => x.Id == Id).FirstOrDefault();
+            return objPermissions;
         }
 
         public bool ModifyPermission(Permissions obj)

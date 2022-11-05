@@ -1,8 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using TestN5.Core.Interface;
+using TestN5.Core.Interfaces;
+using TestN5.Core.Services;
 using TestN5.Data.Data;
+using TestN5.Data.Filters;
 using TestN5.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,12 @@ builder.Services.AddDbContext<TestN5Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TestN5"));
 });
 builder.Services.AddTransient<IPermissions, PermissionsRepository>();
+builder.Services.AddTransient<IServicePermissions, ServicePermissions>();
+builder.Services.AddControllers(option =>
+{
+    option.Filters.Add<GlobalExceptionFilter>();
+});
+
 
 var app = builder.Build();
 
