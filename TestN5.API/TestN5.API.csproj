@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TestN5.Core\TestN5.Core.csproj" />
     <ProjectReference Include="..\TestN5.Infrastructure\TestN5.Data.csproj" />
+	<InternalsVisibleTo Include="$(AssemblyName).Test" />
   </ItemGroup>
 
 </Project>
