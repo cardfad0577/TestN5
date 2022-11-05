@@ -1,10 +1,18 @@
 
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using TestN5.Core.Interface;
 using TestN5.Data.Data;
 using TestN5.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var logger = new LoggerConfiguration()
+  .ReadFrom.Configuration(builder.Configuration)
+  .Enrich.FromLogContext()
+  .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,23 @@ namespace TestN5.Data.Repositories
 
         public bool ModifyPermission(Permissions obj)
         {
-            throw new NotImplementedException();
+            var objPermissions = _testN5Context.Permissions.Where(x => x.Id == obj.Id).FirstOrDefault();
+
+            if (objPermissions != null)
+            {
+                objPermissions.PermissionDate = obj.PermissionDate;
+                objPermissions.PermissionType = obj.PermissionType;
+                objPermissions.EmployeeForname = obj.EmployeeForname;
+                objPermissions.EmployeeSurname = obj.EmployeeSurname;
+                ;
+
+                int rowAfectted = _testN5Context.SaveChanges();
+
+                if (rowAfectted > 0) return true;
+                else return false;
+            }
+            else
+                return false;
         }
 
         public bool RequestPermission(Permissions obj)

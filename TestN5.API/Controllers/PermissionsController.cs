@@ -11,16 +11,21 @@ namespace TestN5.API.Controllers
     public class PermissionsController : ControllerBase
     {
         private readonly IPermissions _iPermissions;
+        private readonly ILogger<PermissionsController> _logger;
+        DateTime thisDay = DateTime.Today;
 
-        public PermissionsController(IPermissions iPermissions)
+        public PermissionsController(IPermissions iPermissions, ILogger<PermissionsController> logger)
         {
             _iPermissions = iPermissions;
+            _logger = logger;
         }
 
         [Route("GetPermissions")]
         [HttpGet]
         public IActionResult GetPermissions()
         {
+            _logger.LogInformation("Request svc GetPermissions date " + thisDay.ToString());
+
             List<Permissions> ltPermissions = _iPermissions.GetPermissions();
             List<DtoPermissions> ltDtoPermissions = ltPermissions.Select(x => new DtoPermissions
             {
@@ -38,6 +43,8 @@ namespace TestN5.API.Controllers
         [HttpPost]
         public IActionResult RequestPermission(DtoPermissions obj)
         {
+            _logger.LogInformation("Request svc RequestPermission date " + thisDay.ToString());
+
             if (!ModelState.IsValid) return BadRequest();
 
             Permissions objPermissions = new Permissions
@@ -50,15 +57,28 @@ namespace TestN5.API.Controllers
 
             bool response = _iPermissions.RequestPermission(objPermissions);
             if (response) return Ok("Se registro correctamente");
-            else return Ok("x");
+            else return Ok("No se registro, intente nuevamente");
         }
 
         [Route("ModifyPermission")]
-        [HttpPatch]
-        public IActionResult ModifyPermission()
+        [HttpPut]
+        public IActionResult ModifyPermission(DtoPermissions obj)
         {
-            List<Permissions> ltPermissions = _iPermissions.GetPermissions();
-            return Ok(ltPermissions);
+            _logger.LogInformation("Request svc ModifyPermission date " + thisDay.ToString());
+            if (!ModelState.IsValid) return BadRequest();
+
+            Permissions objPermissions = new Permissions
+            {
+                Id = obj.Id,
+                EmployeeForname = obj.EmployeeForname,
+                EmployeeSurname = obj.EmployeeSurname,
+                PermissionType = obj.PermissionType,
+                PermissionDate = obj.PermissionDate
+            };
+
+            bool response = _iPermissions.ModifyPermission(objPermissions);
+            if (response) return Ok("Se actualizo correctamente");
+            else return Ok("No se actualizo, intente nuevamente");
         }
 
     }
